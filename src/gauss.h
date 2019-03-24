@@ -8,7 +8,8 @@
 #include <tbb/tick_count.h>
 
 
-using Matrix = std::vector<std::vector<float>>;
+using Vector = std::vector<float>;
+using Matrix = std::vector<Vector>;
 
 
 class Gauss {
@@ -21,9 +22,9 @@ public:
     Gauss(std::string img_path = "../Images/img1.png") {
         src = cv::imread(img_path);
         res = src.clone();
-        const Matrix kernel = { std::vector<float>({0.0625f, 0.125f, 0.0625f}),
-					  		    std::vector<float>({0.125f, 0.25f, 0.125f}),
-					  		    std::vector<float>({0.0625f, 0.125f, 0.0625f}) };
+        kernel = { Vector({0.0625f, 0.125f, 0.0625f}),
+				   Vector({0.125f, 0.25f, 0.125f}),
+				   Vector({0.0625f, 0.125f, 0.0625f}) };
     }
     virtual void gauss_filter() = 0;
 };

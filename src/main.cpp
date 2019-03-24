@@ -1,8 +1,8 @@
 #include "gauss.h"
+#include <iostream>
 
 
 int main(int argc, char *argv[]) {
-    printf("AAA");
     std::string img_path;
 
 	if (argc > 1) img_path = (std::string)argv[1];
@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 
     double begin_time = clock() / (double)CLOCKS_PER_SEC;
     simple_gauss.gauss_filter();
-    printf("Time: %lf sec\n", clock() / (double)CLOCKS_PER_SEC - begin_time);
+    printf("Simple time: %lf sec\n", clock() / (double)CLOCKS_PER_SEC - begin_time);
 
     OMPGauss omp_gauss(img_path);
 

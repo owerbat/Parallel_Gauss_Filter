@@ -1,9 +1,10 @@
 #include "gauss.h"
+#include <iostream>
 
 
 void Gauss::set_color(int x, int y) {
     int r = 0, g = 0, b = 0;
-
+	
 	for (int i = -1; i <= 1; ++i)
 		for (int j = -1; j <= 1; ++j) {
 			cv::Vec3b neighborColor = src.at<cv::Vec3b>(x + i, y + j);
