@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
 
     double begin_time = clock() / (double)CLOCKS_PER_SEC;
     simple_gauss.gauss_filter();
-    printf("Simple time: %lf sec\n", clock() / (double)CLOCKS_PER_SEC - begin_time);
+    //printf("Simple time: %lf sec\n", clock() / (double)CLOCKS_PER_SEC - begin_time);
+    double simple_time = clock() / (double)CLOCKS_PER_SEC - begin_time;
 
     if (!is_file_exist("../Results/img/simple_" + short_name))
         cv::imwrite("../Results/img/simple_" + short_name, simple_gauss.get_result());
@@ -28,7 +29,8 @@ int main(int argc, char *argv[]) {
 
     double omp_begin_time = omp_get_wtime();
     omp_gauss.gauss_filter();
-    printf("OpenMP time: %lf sec\n", omp_get_wtime() - omp_begin_time);
+    //printf("OpenMP time: %lf sec\n", omp_get_wtime() - omp_begin_time);
+    double omp_time = omp_get_wtime() - omp_begin_time;
 
     if (!is_file_exist("../Results/img/omp_" + short_name))
         cv::imwrite("../Results/img/omp_" + short_name, omp_gauss.get_result());
@@ -37,10 +39,15 @@ int main(int argc, char *argv[]) {
 
     tbb::tick_count tbb_begin_time = tbb::tick_count::now();
     tbb_gauss.gauss_filter();
-    printf("TBB time: %g sec\n", (tbb::tick_count::now() - tbb_begin_time).seconds());
+    //printf("TBB time: %g sec\n", (tbb::tick_count::now() - tbb_begin_time).seconds());
+    double tbb_time = (tbb::tick_count::now() - tbb_begin_time).seconds();
 
     if (!is_file_exist("../Results/img/tbb_" + short_name))
         cv::imwrite("../Results/img/tbb_" + short_name, tbb_gauss.get_result());
+
+    std::ofstream fout("../Results/txt/times.txt", std::ios_base::app);
+    fout << simple_time << "\t" << omp_time << "\t" << tbb_time << "\n";
+    fout.close();
 
     return 0;
 }
