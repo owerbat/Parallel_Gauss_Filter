@@ -26,6 +26,7 @@ public:
 				   Vector({0.125f, 0.25f, 0.125f}),
 				   Vector({0.0625f, 0.125f, 0.0625f}) };
     }
+    cv::Mat &get_result() { return res; }
     virtual void gauss_filter() = 0;
 };
 
