@@ -7,8 +7,6 @@ else
 number=10
 fi
 
-#tput sc
-
 for (( i=1; i <= $number; i++ ))
 do
 ../Source/main
