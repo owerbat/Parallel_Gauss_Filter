@@ -1,4 +1,4 @@
 *.o
-src/main
+Source/main
 Results/img/*
 !Results/img/.empty
