@@ -10,7 +10,13 @@ TARGET          := main
 
 .PHONY: all clean bar
 
-all: main
+all: main tbb
+
+tbb: tbb_presentation.o gauss.o
+	$(CC) $(STD) tbb_presentation.o gauss.o $(LIBRARIES) -o tbb
+
+tbb_presentation.o: tbb_presentation.cpp
+	$(CC) $(STD) $(CFLAGS) tbb_presentation.cpp $(LIBRARIES)
 
 main: main.o gauss.o
 	$(CC) $(STD) main.o gauss.o $(LIBRARIES) -o main

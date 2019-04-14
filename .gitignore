@@ -1,5 +1,6 @@
 *.o
 Source/main
+Source/tbb
 Results/img/*
 !Results/img/.empty
 .vscode/*
