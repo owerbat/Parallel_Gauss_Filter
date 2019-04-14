@@ -2,3 +2,4 @@
 Source/main
 Results/img/*
 !Results/img/.empty
+.vscode/*

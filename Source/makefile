@@ -8,7 +8,7 @@ SOURCES         := main.cpp gauss.cpp
 OBJECTS         := $(SOURCES:.cpp=.o)
 TARGET          := main
 
-.PHONY: all clean
+.PHONY: all clean bar
 
 all: main
 
