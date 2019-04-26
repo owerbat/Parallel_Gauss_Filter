@@ -1,25 +1,26 @@
 #include "gauss.h"
 #include "file_interactions.h"
 #include <iostream>
+#include <string>
 
 
 int main(int argc, char *argv[]) {
-    std::string img_path;
+    int radius = 2;
+	if (argc > 1) radius = std::stoi(argv[1]);
 
-	if (argc > 1) img_path = (std::string)argv[1];
-	else img_path = "../Images/img1.png";
-
+    std::string img_path = "../Images/img1.png";
+	if (argc > 2) img_path = (std::string)argv[2];
     std::string short_name = get_short_name(img_path);
 
     //parallel_for version
-    TBBGauss tbb_gauss(img_path);
+    TBBGauss tbb_gauss(img_path, radius);
 
     tbb::tick_count tbb_begin_time = tbb::tick_count::now();
     tbb_gauss.gauss_filter();
     double tbb_time = (tbb::tick_count::now() - tbb_begin_time).seconds();
 
     //version with tasks
-    TBBGaussWithTask tbb_tasks_gauss(img_path);
+    TBBGaussWithTask tbb_tasks_gauss(img_path, radius);
 
     tbb::tick_count tbb_tasks_begin_time = tbb::tick_count::now();
     tbb_tasks_gauss.gauss_filter();

@@ -13,22 +13,23 @@ using Vector = std::vector<float>;
 using Matrix = std::vector<Vector>;
 
 
-void set_color(const cv::Mat& src, cv::Mat& res, const Matrix& kernel, int x, int y);
+void set_color(const cv::Mat& src, cv::Mat& res, int radius, const Matrix& kernel, int x, int y);
 
 
 class Gauss {
 protected:
     cv::Mat src;
     cv::Mat res;
+    int radius;
     Matrix kernel;
 
+    Matrix calculate_kernel(float sigma);
+
 public:
-    Gauss(std::string img_path = "../Images/img1.png") {
+    Gauss(std::string img_path = "../Images/img1.png", int _radius = 2): radius(_radius) {
         src = cv::imread(img_path);
         res = src.clone();
-        kernel = { Vector({0.0625f, 0.125f, 0.0625f}),
-				   Vector({0.125f, 0.25f, 0.125f}),
-				   Vector({0.0625f, 0.125f, 0.0625f}) };
+        kernel = calculate_kernel(2.0f);
     }
     cv::Mat& get_result() { return res; }
     virtual void gauss_filter() = 0;
@@ -37,28 +38,28 @@ public:
 
 class SimpleGauss: public Gauss {
 public:
-    SimpleGauss(std::string img_path = "../Images/img1.png"): Gauss(img_path) {}
+    SimpleGauss(std::string img_path = "../Images/img1.png", int _radius = 2): Gauss(img_path, _radius) {}
     void gauss_filter();
 };
 
 
 class OMPGauss: public Gauss {
 public:
-    OMPGauss(std::string img_path = "../Images/img1.png"): Gauss(img_path) {}
+    OMPGauss(std::string img_path = "../Images/img1.png", int _radius = 2): Gauss(img_path, _radius) {}
     void gauss_filter();
 };
 
 
 class TBBGauss: public Gauss {
 public:
-    TBBGauss(std::string img_path = "../Images/img1.png"): Gauss(img_path) {}
+    TBBGauss(std::string img_path = "../Images/img1.png", int _radius = 2): Gauss(img_path, _radius) {}
     void gauss_filter();
 };
 
 
 class TBBGaussWithTask: public Gauss {
 public:
-    TBBGaussWithTask(std::string img_path = "../Images/img1.png"): Gauss(img_path) {}
+    TBBGaussWithTask(std::string img_path = "../Images/img1.png", int _radius = 2): Gauss(img_path, _radius) {}
     void gauss_filter();
 };
 
@@ -66,11 +67,14 @@ public:
 class BaseTask: public tbb::task {
 	cv::Mat src;
 	cv::Mat res;
+    int radius;
+    Matrix kernel;
 
     std::vector<int> get_borders() const;
 
 public:
-	BaseTask(const cv::Mat& _src, cv::Mat& _res): src(_src), res(_res) {}
+	BaseTask(const cv::Mat& _src, cv::Mat& _res, int _radius, Matrix _kernel):
+        src(_src), res(_res), radius(_radius), kernel(_kernel) {}
     tbb::task* execute();
 };
 
@@ -80,14 +84,11 @@ private:
 	cv::Mat src;
 	cv::Mat res;
 	int min_column, max_column;
+    int radius;
 	Matrix kernel;
 
 public:
-    GaussTask(const cv::Mat& _src, cv::Mat& _res, int min, int max):
-        src(_src), res(_res), min_column(min), max_column(max) {
-            kernel = { Vector({0.0625f, 0.125f, 0.0625f}),
-					   Vector({0.125f, 0.25f, 0.125f}),
-					   Vector({0.0625f, 0.125f, 0.0625f}) };
-        }
+    GaussTask(const cv::Mat& _src, cv::Mat& _res, int min, int max, int _radius, Matrix _kernel):
+        src(_src), res(_res), min_column(min), max_column(max), radius(_radius), kernel(_kernel) {}
     tbb::task* execute();
 };

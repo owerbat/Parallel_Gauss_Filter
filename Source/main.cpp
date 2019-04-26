@@ -3,11 +3,8 @@
 
 
 int main(int argc, char *argv[]) {
-    std::string img_path;
-
-	if (argc > 1) img_path = (std::string)argv[1];
-	else img_path = "../Images/img1.png";
-
+    std::string img_path = "../Images/img1.png";
+    if (argc > 1) img_path = (std::string)argv[1];
     std::string short_name = get_short_name(img_path);
     
     // Simple version
